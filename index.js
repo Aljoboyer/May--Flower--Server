@@ -35,7 +35,7 @@ async function run(){
                 const result = await UserCollection.findOne(query);
                 res.send(result)
             })
-        //--------other End----//
+        //--------Others End----//
 
  
 // ----------------For Admin----------------//
