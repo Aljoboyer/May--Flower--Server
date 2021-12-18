@@ -45,8 +45,7 @@ async function run(){
             const data = req.body;
             const imgdata = req.files.img.data;
             const img2data = req.files.img2.data;
-            console.log('main data',data)
-            console.log('image',imgdata)
+
             const encodedpic1 = imgdata.toString('base64');
             const img = Buffer.from(encodedpic1, 'base64');
 
