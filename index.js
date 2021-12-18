@@ -164,6 +164,13 @@ async function run(){
             const result = await FlowerCollection.find(query).toArray();
             res.send(result)
         })
+          //geting flower by ocassion
+          app.get('/seasonalcategory', async (req, res) => {
+            const data = req.query.season;
+            const query = {category: data};
+            const result = await FlowerCollection.find(query).toArray();
+            res.send(result)
+        })
       //-------------Payment System-----------//
         //payment intent
         app.post('/create-payment-intent', async (req, res) => {
