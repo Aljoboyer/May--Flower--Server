@@ -26,7 +26,8 @@ async function run(){
         const UserCartCollection = database.collection('UserCartCollection');
         const UserCollection = database.collection('UserCollection');
         const PaymentCollection = database.collection('PaymentCollection');
-        const StatusCollection = database.collection('StatusCollection')
+        const StatusCollection = database.collection('StatusCollection');
+        const MomentsCollection = database.collection('MomentsCollection')
 
         //--------Others-----//
             app.get('/rolecheck', async(req, res) => {
@@ -168,6 +169,32 @@ async function run(){
             const data = req.query.season;
             const query = {category: data};
             const result = await FlowerCollection.find(query).toArray();
+            res.send(result)
+        })
+
+        //shop lessthan sixty 
+         app.get('/getFlowersLTSixty', async (req, res) => {
+            const query = { flowerprice: { $lt: '60' } };
+            const result = await FlowerCollection.find(query).toArray();
+            res.send(result)
+        })
+         //user posting happy moments
+         app.post('/postMoments', async(req, res) => {
+            const data = req.body;
+            const imgdata = req.files.img.data;
+        
+            const encodedpic1 = imgdata.toString('base64');
+            const img = Buffer.from(encodedpic1, 'base64');
+
+            const flower = {...data, img};
+            const result = await MomentsCollection.insertOne(flower)
+            res.json(result)
+        });
+        //geting moments
+        app.get('/getMoments', async(req, res) => {
+            const cursor = MomentsCollection.find({});
+
+            const result = await cursor.toArray();
             res.send(result)
         })
       //-------------Payment System-----------//
