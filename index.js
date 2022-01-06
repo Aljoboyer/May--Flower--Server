@@ -197,6 +197,19 @@ async function run(){
             const result = await cursor.toArray();
             res.send(result)
         })
+        app.put('/CancelOrder/:id', async (req, res) => {
+            const id = req.params.id
+            console.log(id)
+            const filter = {_id: ObjectId(id)}
+            const option = {upsert: true}
+            const updatedoc = {
+                $set: {
+                    status: 'canceled'
+                }
+            }
+            const result = await PaymentCollection.updateOne(filter, updatedoc, option)
+            res.json(result)
+        })
       //-------------Payment System-----------//
         //payment intent
         app.post('/create-payment-intent', async (req, res) => {
