@@ -142,7 +142,7 @@ async function run(){
             const result = await PaymentCollection.find(query).toArray();
             res.send(result)
         })
-
+ 
         //getting payment status
         app.get('/getpaymetstatus', async (req, res) =>{
             const email = req.query.email;
