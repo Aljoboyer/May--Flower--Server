@@ -13,33 +13,40 @@ app.use(cors());
 app.use(express.json({limit: '50mb'}));
 app.use(fileUpload());
 app.use(express.urlencoded({limit: '50mb'}));
-  
-const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.USER_PASS}@cluster0.obwta.mongodb.net/FlowersShopDB?retryWrites=true&w=majority`;
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true , serverApi: ServerApiVersion.v1}); 
 
+// database connetion
+// const connectDB = require("./src/connection/connectDB");
+// connectDB()
+const uri = `mongodb+srv://${process.env.USER_DB}:${process.env.USER_PASS}@cluster0.obwta.mongodb.net/FlowersShopDB?retryWrites=true&w=majority`;
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 async function run(){
     try{
-        await client.connect(); 
+        await client.connect();
 
         const database = client.db('FlowersShopDB');
         const FlowerCollection = database.collection('FlowerCollection');
-        const UserCartCollection = database.collection('UserCartCollection');
         const UserCollection = database.collection('UserCollection');
-        const PaymentCollection = database.collection('PaymentCollection');
+        const UserCartCollection = database.collection('UserCartCollection');
         const StatusCollection = database.collection('StatusCollection');
-        const MomentsCollection = database.collection('MomentsCollection')
+        const MomentsCollection = database.collection('MomentsCollection');
+        const PaymentCollection = database.collection('PaymentCollection');
+
 
         //--------Others-----//
             app.get('/rolecheck', async(req, res) => {
-                const email = req.query.email;
-                const query = {email: email};
-                const result = await UserCollection.findOne(query);
-                res.send(result)
+                try {
+                    const email = req.query.email;
+                    const query = {email: email};
+                    const result = await UserCollection.findOne(query);
+                    console.log('hitted ===>', result)
+                    res.json(result)
+                } catch (error) {
+                    res.json({msg: 'Something Went Wrong'})
+                }
             })
         //--------Others End----//
-
- 
+        
 // ----------------For Admin----------------//
 
         //admin adding flower details to data base
@@ -62,8 +69,9 @@ async function run(){
         //saving user to database
         app.post('/saveuser', async(req, res) => {
             const data = req.body;
-   
+            
             const result = await UserCollection.insertOne(data);
+            console.log('hitted ===>', result)
             res.json(result)
         })
 
